@@ -1,4 +1,4 @@
-"""RSS parser"""
+"""RSS parser for news sites with categories"""
 import logging
 import asyncio
 import feedparser
@@ -8,7 +8,7 @@ from dateutil import parser
 logging.basicConfig(level=logging.INFO)
 
 
-async def get_rss_items(url: str) -> list[dict[str, str]]:
+async def get_rss_items(url: str):
     """get rss items
 
     Args:
@@ -21,10 +21,9 @@ async def get_rss_items(url: str) -> list[dict[str, str]]:
 
     feed = feedparser.parse(url)
 
-    data: list[dict[str, str]] = []
-
     for entry in feed["entries"]:
-        entry_dict = {
+        
+        yield {
             "title": entry["title"],
             "category": entry["category"],
             "link": entry["link"],
@@ -35,11 +34,17 @@ async def get_rss_items(url: str) -> list[dict[str, str]]:
             ],
         }
 
-        data.append(entry_dict)
+async def collect_rss_items(url: str):
+    """collect rss items
 
-    data.reverse()
+    Args:
+        url (str): rss link
 
-    return data
+    Returns:
+        list[dict[str, str]]
+            List of news entries
+    """
+    return [item async for item in get_rss_items(url)]
 
 if __name__ == "__main__":
-    asyncio.run(get_rss_items("https://zelwa.by/feed/"))
+    asyncio.run(collect_rss_items("https://www.vesti.ru/vesti.rss"))
