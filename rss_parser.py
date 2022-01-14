@@ -22,7 +22,6 @@ async def get_rss_items(url: str):
     feed = feedparser.parse(url)
 
     for entry in feed["entries"]:
-        
         yield {
             "title": entry["title"],
             "category": entry["category"],
