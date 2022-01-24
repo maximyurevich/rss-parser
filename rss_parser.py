@@ -28,7 +28,7 @@ async def get_rss_items(url: str):
             "published": entry["published"]
         }
 
-async def collect_rss_items(url: str):
+async def collect_rss_items(url: str) -> list[dict[str, str]]:
     """collect rss items
 
     Args:
