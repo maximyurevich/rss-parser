@@ -2,7 +2,6 @@
 import logging
 import asyncio
 import feedparser
-from dateutil import parser
 
 
 logging.basicConfig(level=logging.INFO)
@@ -26,11 +25,7 @@ async def get_rss_items(url: str):
             "title": entry["title"],
             "category": entry["category"],
             "link": entry["link"],
-            "published": [
-                parser.parse(entry["published"]).day,
-                parser.parse(entry["published"]).time().hour,
-                parser.parse(entry["published"]).time().minute,
-            ],
+            "published": entry["published"]
         }
 
 async def collect_rss_items(url: str):
